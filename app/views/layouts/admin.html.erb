@@ -85,7 +85,7 @@
               <p class="text-amber-400 text-xs">Administrator</p>
             </div>
           </div>
-          <%= button_to "Sign out", session_path, method: :delete,
+          <%= button_to session_path, method: :delete,
               class: "w-full flex items-center justify-center gap-2 text-amber-300 hover:text-white hover:bg-amber-900 text-xs py-2 px-3 rounded-lg transition-all" do %>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
