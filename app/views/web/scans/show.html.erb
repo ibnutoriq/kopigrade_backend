@@ -52,7 +52,7 @@
     <div class="flex items-center gap-4">
       <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center <%= grade_classes[:ring] %>">
         <span class="font-bold text-lg <%= grade_classes[:text] %>">
-          <%= @scan.sni_grade.to_s.split.last %>
+          <%= @scan.sni_grade.to_s.start_with?("Mutu") ? @scan.sni_grade.split.last : "✗" %>
         </span>
       </div>
       <div>
