@@ -1,34 +1,55 @@
 <div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-bold text-gray-800">Pengguna Admin</h1>
-  <%= link_to "Tambah Pengguna", new_admin_user_path,
-      class: "bg-amber-700 hover:bg-amber-600 text-white px-4 py-2 rounded text-sm" %>
+  <div>
+    <h1 class="text-xl font-semibold text-slate-800">Admin Users</h1>
+    <p class="text-xs text-slate-400 mt-0.5">Manage dashboard access</p>
+  </div>
+  <%= link_to "+ Add User", new_admin_user_path,
+      class: "inline-flex items-center gap-2 bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm" %>
 </div>
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
-  <table class="w-full text-sm">
-    <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
-      <tr>
-        <th class="px-6 py-3 text-left">Email</th>
-        <th class="px-6 py-3 text-left">Role</th>
-        <th class="px-6 py-3 text-left">Dibuat</th>
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-100">
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">User</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Role</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Joined</th>
         <th class="px-6 py-3"></th>
       </tr>
     </thead>
-    <tbody class="divide-y divide-gray-100">
+    <tbody class="divide-y divide-slate-50">
       <% @users.each do |user| %>
-        <tr class="hover:bg-gray-50">
-          <td class="px-6 py-3 font-medium text-gray-800"><%= user.email_address %></td>
-          <td class="px-6 py-3">
-            <%= user.admin? ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">Admin</span>'.html_safe : '<span class="text-gray-500 text-xs">Staff</span>'.html_safe %>
+        <tr class="hover:bg-slate-50/60 transition-colors group">
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-amber-800 text-xs font-bold"><%= user.email_address.first.upcase %></span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-slate-700"><%= user.email_address %></p>
+                <% if user == Current.user %>
+                  <p class="text-xs text-slate-400">You</p>
+                <% end %>
+              </div>
+            </div>
           </td>
-          <td class="px-6 py-3 text-gray-400"><%= user.created_at.strftime("%d %b %Y") %></td>
-          <td class="px-6 py-3 flex gap-3">
-            <%= link_to "Edit", edit_admin_user_path(user), class: "text-amber-700 hover:underline text-xs" %>
-            <% unless user == Current.user %>
-              <%= button_to "Hapus", admin_user_path(user), method: :delete,
-                  data: { turbo_confirm: "Hapus pengguna ini?" },
-                  class: "text-red-500 hover:underline text-xs bg-transparent border-0 cursor-pointer" %>
+          <td class="px-6 py-4">
+            <% if user.admin? %>
+              <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">Admin</span>
+            <% else %>
+              <span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 text-xs font-medium rounded-full">Staff</span>
             <% end %>
+          </td>
+          <td class="px-6 py-4 text-sm text-slate-400"><%= user.created_at.strftime("%-d %b %Y") %></td>
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+              <%= link_to "Edit", edit_admin_user_path(user), class: "text-xs font-medium text-amber-700 hover:text-amber-900" %>
+              <% unless user == Current.user %>
+                <%= button_to "Delete", admin_user_path(user), method: :delete,
+                    data: { turbo_confirm: "Delete #{user.email_address}?" },
+                    class: "text-xs font-medium text-red-400 hover:text-red-600 bg-transparent border-0 cursor-pointer" %>
+              <% end %>
+            </div>
           </td>
         </tr>
       <% end %>

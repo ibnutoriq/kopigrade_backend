@@ -1,88 +1,213 @@
-<h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
+<%# ── Metric cards ─────────────────────────────────────────────────── %>
+<div class="grid grid-cols-2 xl:grid-cols-5 gap-4 mb-6">
 
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-  <%= render "admin/dashboard/metric_card", label: "Scans This Month", value: @total_scans_mtd, color: "amber" %>
-  <%= render "admin/dashboard/metric_card", label: "Avg SNI Defect Value", value: @avg_defect_value_mtd, color: "blue" %>
-  <%= render "admin/dashboard/metric_card", label: "Unique Devices", value: @unique_devices_mtd, color: "purple" %>
-  <%= render "admin/dashboard/metric_card", label: "Export Eligible (%)", value: "#{@export_eligible_pct}%", color: "green" %>
-  <div class="bg-white rounded-xl shadow p-4 col-span-2 md:col-span-1">
-    <p class="text-xs text-gray-500 mb-1">Today's Market Prices</p>
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+    <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
+      <svg class="w-5 h-5 text-amber-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+    </div>
+    <div>
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Scans This Month</p>
+      <p class="text-2xl font-bold text-slate-800 mt-1"><%= @total_scans_mtd %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+      <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+    </div>
+    <div>
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Avg SNI Defect</p>
+      <p class="text-2xl font-bold text-slate-800 mt-1"><%= @avg_defect_value_mtd %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+      <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+      </svg>
+    </div>
+    <div>
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Unique Devices</p>
+      <p class="text-2xl font-bold text-slate-800 mt-1"><%= @unique_devices_mtd %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
+    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center shrink-0">
+      <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+      </svg>
+    </div>
+    <div>
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Export Eligible</p>
+      <p class="text-2xl font-bold text-slate-800 mt-1"><%= @export_eligible_pct %>%</p>
+    </div>
+  </div>
+
+  <div class="bg-gradient-to-br from-amber-700 to-amber-900 rounded-2xl shadow-sm p-5 col-span-2 xl:col-span-1">
+    <p class="text-xs font-medium text-amber-200 uppercase tracking-wide mb-3">Market Prices</p>
     <% if @latest_robusta_price %>
-      <p class="text-sm font-medium text-gray-700">Robusta: <span class="text-amber-700 font-bold">Rp <%= number_with_delimiter(@latest_robusta_price.price) %>/kg</span></p>
+      <div class="mb-2">
+        <p class="text-amber-300 text-xs">Robusta</p>
+        <p class="text-white font-bold text-lg">Rp <%= number_with_delimiter(@latest_robusta_price.price) %><span class="text-amber-300 font-normal text-xs">/kg</span></p>
+      </div>
     <% end %>
     <% if @latest_arabika_price %>
-      <p class="text-sm font-medium text-gray-700">Arabika: <span class="text-green-700 font-bold">Rp <%= number_with_delimiter(@latest_arabika_price.price) %>/kg</span></p>
+      <div>
+        <p class="text-amber-300 text-xs">Arabika</p>
+        <p class="text-white font-bold text-lg">Rp <%= number_with_delimiter(@latest_arabika_price.price) %><span class="text-amber-300 font-normal text-xs">/kg</span></p>
+      </div>
     <% end %>
     <% unless @latest_robusta_price || @latest_arabika_price %>
-      <p class="text-sm text-gray-400">No price data yet</p>
+      <p class="text-amber-300 text-sm">No price data yet</p>
     <% end %>
   </div>
+
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-  <div class="bg-white rounded-xl shadow p-6">
-    <h2 class="text-base font-semibold text-gray-700 mb-4">Daily Scan Volume (last 30 days)</h2>
-    <%= line_chart @daily_scans, height: "200px", colors: ["#b45309"] %>
+<%# ── Charts row ────────────────────────────────────────────────────── %>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h2 class="text-sm font-semibold text-slate-700">Daily Scan Volume</h2>
+        <p class="text-xs text-slate-400 mt-0.5">Last 30 days</p>
+      </div>
+      <span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-full">Monthly</span>
+    </div>
+    <%= line_chart @daily_scans, height: "220px",
+        colors: ["#b45309"],
+        library: { scales: { y: { beginAtZero: true, grid: { color: "#f1f5f9" } }, x: { grid: { display: false } } },
+                   plugins: { legend: { display: false } } } %>
   </div>
-  <div class="bg-white rounded-xl shadow p-6">
-    <h2 class="text-base font-semibold text-gray-700 mb-4">SNI Grade Distribution This Month</h2>
-    <%= pie_chart @grade_distribution, height: "200px" %>
+
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h2 class="text-sm font-semibold text-slate-700">SNI Grade Distribution</h2>
+        <p class="text-xs text-slate-400 mt-0.5">This month</p>
+      </div>
+      <span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-full">Breakdown</span>
+    </div>
+    <% if @grade_distribution.any? %>
+      <%= pie_chart @grade_distribution, height: "220px",
+          colors: ["#d97706","#b45309","#92400e","#78350f","#451a03","#fbbf24","#fcd34d"] %>
+    <% else %>
+      <div class="h-56 flex flex-col items-center justify-center text-slate-300">
+        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+        </svg>
+        <p class="text-sm">No grade data yet</p>
+      </div>
+    <% end %>
   </div>
+
 </div>
 
-<div class="bg-white rounded-xl shadow p-6 mb-8">
-  <h2 class="text-base font-semibold text-gray-700 mb-4">Avg Defect Value by Sub-District (Top 10)</h2>
-  <%= bar_chart @defect_by_subdistrict, height: "200px", colors: ["#92400e"] %>
-</div>
-
-<div class="bg-white rounded-xl shadow overflow-hidden">
-  <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-    <h2 class="text-lg font-semibold text-gray-700">Latest Scans</h2>
-    <%= link_to "View All", admin_scan_results_path, class: "text-sm text-amber-700 hover:underline" %>
+<%# ── Sub-district bar chart ─────────────────────────────────────────── %>
+<% if @defect_by_subdistrict.any? %>
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-6">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h2 class="text-sm font-semibold text-slate-700">Avg Defect Value by Sub-District</h2>
+        <p class="text-xs text-slate-400 mt-0.5">Top 10 · All time</p>
+      </div>
+      <span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-full">Regional</span>
+    </div>
+    <%= bar_chart @defect_by_subdistrict, height: "200px",
+        colors: ["#92400e"],
+        library: { scales: { y: { beginAtZero: true, grid: { color: "#f1f5f9" } }, x: { grid: { display: false } } },
+                   plugins: { legend: { display: false } } } %>
   </div>
+<% end %>
+
+<%# ── Latest scans table ─────────────────────────────────────────────── %>
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+  <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+    <div>
+      <h2 class="text-sm font-semibold text-slate-700">Latest Scans</h2>
+      <p class="text-xs text-slate-400 mt-0.5">Most recent 10 results</p>
+    </div>
+    <%= link_to "View all →", admin_scan_results_path,
+        class: "text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors" %>
+  </div>
+
   <% if @latest_scans.empty? %>
-    <p class="px-6 py-8 text-center text-gray-400">No scan results yet.</p>
+    <div class="py-16 flex flex-col items-center text-slate-300">
+      <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+      <p class="text-sm font-medium text-slate-400">No scan results yet</p>
+      <p class="text-xs text-slate-300 mt-1">Scans submitted from the Flutter app will appear here</p>
+    </div>
   <% else %>
-    <table class="w-full text-sm">
-      <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
-        <tr>
-          <th class="px-6 py-3 text-left">ID</th>
-          <th class="px-6 py-3 text-left">Sub-District</th>
-          <th class="px-6 py-3 text-left">Variety</th>
-          <th class="px-6 py-3 text-left">SNI Grade</th>
-          <th class="px-6 py-3 text-left">Export Eligible</th>
-          <th class="px-6 py-3 text-left">Status</th>
-          <th class="px-6 py-3 text-left">Time</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-100">
-        <% @latest_scans.each do |scan| %>
-          <tr class="hover:bg-gray-50">
-            <td class="px-6 py-3 text-gray-400">#<%= scan.id %></td>
-            <td class="px-6 py-3 font-medium text-gray-800"><%= scan.sub_district || "—" %></td>
-            <td class="px-6 py-3 capitalize"><%= scan.variety %></td>
-            <td class="px-6 py-3 font-semibold text-amber-800"><%= scan.sni_grade || "—" %></td>
-            <td class="px-6 py-3">
-              <% if scan.export_eligible? %>
-                <span class="text-green-600 font-medium">Yes</span>
-              <% elsif scan.export_eligible == false %>
-                <span class="text-red-500">No</span>
-              <% else %>
-                <span class="text-gray-400">—</span>
-              <% end %>
-            </td>
-            <td class="px-6 py-3">
-              <span class="px-2 py-0.5 rounded-full text-xs font-semibold
-                <%= scan.pending? ? 'bg-yellow-100 text-yellow-700' :
-                    scan.analyzed? ? 'bg-green-100 text-green-700' :
-                                     'bg-red-100 text-red-700' %>">
-                <%= scan.status %>
-              </span>
-            </td>
-            <td class="px-6 py-3 text-gray-400"><%= scan.created_at.strftime("%d %b %Y %H:%M") %></td>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100">
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Sub-District</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Variety</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">SNI Grade</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Export</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Date</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <% @latest_scans.each do |scan| %>
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="px-6 py-3.5">
+                <span class="text-xs font-mono text-slate-400">#<%= scan.id %></span>
+              </td>
+              <td class="px-6 py-3.5">
+                <span class="text-sm font-medium text-slate-700"><%= scan.sub_district || "—" %></span>
+              </td>
+              <td class="px-6 py-3.5">
+                <span class="px-2 py-0.5 bg-amber-50 text-amber-800 text-xs font-medium rounded-full capitalize"><%= scan.variety %></span>
+              </td>
+              <td class="px-6 py-3.5">
+                <% if scan.sni_grade.present? %>
+                  <span class="text-sm font-bold text-amber-800"><%= scan.sni_grade %></span>
+                <% else %>
+                  <span class="text-slate-300 text-sm">—</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-3.5">
+                <% if scan.export_eligible? %>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-full">
+                    <span class="w-1 h-1 bg-emerald-500 rounded-full"></span>Yes
+                  </span>
+                <% elsif scan.export_eligible == false %>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 text-red-600 text-xs font-medium rounded-full">
+                    <span class="w-1 h-1 bg-red-400 rounded-full"></span>No
+                  </span>
+                <% else %>
+                  <span class="text-slate-300 text-sm">—</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-3.5">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
+                  <%= scan.pending?  ? 'bg-yellow-100 text-yellow-800' :
+                      scan.analyzed? ? 'bg-emerald-100 text-emerald-800' :
+                                       'bg-red-100 text-red-700' %>">
+                  <%= scan.status.capitalize %>
+                </span>
+              </td>
+              <td class="px-6 py-3.5">
+                <span class="text-xs text-slate-400"><%= scan.created_at.strftime("%-d %b %Y") %></span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% end %>
 </div>
