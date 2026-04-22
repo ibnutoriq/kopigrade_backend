@@ -1,97 +1,54 @@
-# Name of your application. Used to uniquely configure containers.
 service: kopigrade_backend
+image: YOUR_DOCKERHUB_USERNAME/kopigrade_backend
 
-# Name of the container image (use your-user/app-name on external registries).
-image: kopigrade_backend
-
-# Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
-  # job:
-  #   hosts:
-  #     - 192.168.0.1
-  #   cmd: bin/jobs
+    - YOUR_ORACLE_IP
 
-# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
-# If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
-#
-# Using an SSL proxy like this requires turning on config.assume_ssl and config.force_ssl in production.rb!
-#
-# Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
-#
+# Uncomment and fill in when you have a domain name pointing to the server.
+# Let's Encrypt requires a real domain — does not work with bare IP.
 # proxy:
 #   ssl: true
-#   host: app.example.com
+#   host: yourdomain.com
 
-# Where you keep your container images.
 registry:
-  # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
+  username: YOUR_DOCKERHUB_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
-  # Needed for authenticated registries.
-  # username: your-user
-
-  # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
-
-# Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
     - RAILS_MASTER_KEY
     - GOOGLE_API_KEY
+    - KOPIGRADE_BACKEND_DATABASE_PASSWORD
   clear:
-    SOLID_QUEUE_IN_PUMA: true
-    JOB_CONCURRENCY: 2
+    SOLID_QUEUE_IN_PUMA: "true"
+    JOB_CONCURRENCY: "2"
     DB_HOST: kopigrade_backend-db
-    CORS_ALLOWED_ORIGINS: ""
-    APP_HOST: ""
+    CORS_ALLOWED_ORIGINS: "http://YOUR_ORACLE_IP"
 
-# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
-# "bin/kamal logs -r job" will tail logs from the first server in the job section.
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
-  shell: app exec --interactive --reuse "bash"
-  logs: app logs -f
-  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+  shell:   app exec --interactive --reuse "bash"
+  logs:    app logs -f
+  dbc:     app exec --interactive --reuse "bin/rails dbconsole --include-password"
 
-# Use a persistent storage volume for sqlite database files and local Active Storage files.
-# Recommended to change this to a mounted volume path that is backed up off server.
 volumes:
   - "kopigrade_backend_storage:/rails/storage"
 
-# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
-# hitting 404 on in-flight requests. Combines all files from new and old
-# version inside the asset_path.
 asset_path: /rails/public/assets
 
-# Configure the image builder.
 builder:
-  arch: amd64
-
-  # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
-  # remote: ssh://docker@docker-builder-server
-  #
-  # # Pass arguments and secrets to the Docker build process
-  # args:
-  #   RUBY_VERSION: 3.4.4
-  # secrets:
-  #   - GITHUB_TOKEN
-  #   - RAILS_MASTER_KEY
-
-# Use a different ssh user than root
-# ssh:
-#   user: app
+  arch: arm64
 
 accessories:
   db:
     image: postgres:16
-    host: 192.168.0.1
+    host: YOUR_ORACLE_IP
     port: 5432
     env:
       clear:
-        POSTGRES_USER: kopigrade
+        POSTGRES_USER: kopigrade_backend
         POSTGRES_DB: kopigrade_backend_production
       secret:
         - POSTGRES_PASSWORD
@@ -99,22 +56,3 @@ accessories:
       - config/init.sql:/docker-entrypoint-initdb.d/init.sql
     directories:
       - data:/var/lib/postgresql/data
-#     host: 192.168.0.2
-#     # Change to 3306 to expose port to the world instead of just local network.
-#     port: "127.0.0.1:3306:3306"
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: valkey/valkey:8
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data

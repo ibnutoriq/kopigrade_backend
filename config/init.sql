@@ -1,0 +1,7 @@
+CREATE DATABASE kopigrade_backend_production_queue;
+CREATE DATABASE kopigrade_backend_production_cache;
+CREATE DATABASE kopigrade_backend_production_cable;
+
+GRANT ALL PRIVILEGES ON DATABASE kopigrade_backend_production_queue TO kopigrade_backend;
+GRANT ALL PRIVILEGES ON DATABASE kopigrade_backend_production_cache TO kopigrade_backend;
+GRANT ALL PRIVILEGES ON DATABASE kopigrade_backend_production_cable TO kopigrade_backend;
