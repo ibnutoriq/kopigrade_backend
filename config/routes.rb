@@ -15,9 +15,10 @@ Rails.application.routes.draw do
   namespace :admin do
     get "dashboard", to: "dashboard#show"
     resources :scan_results, only: [ :index, :show, :destroy ]
-    resources :market_prices
+    resources :market_prices do
+      collection { post :scrape_now }
+    end
     resources :users
-    post "market_prices/scrape_now", to: "market_prices#scrape_now", as: :scrape_now_market_prices
     get "exports/scan_results", to: "exports#scan_results", as: :export_scan_results,
         defaults: { format: :csv }
   end

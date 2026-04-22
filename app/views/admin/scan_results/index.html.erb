@@ -3,7 +3,7 @@
     <h1 class="text-xl font-semibold text-slate-800">Scan Results</h1>
     <p class="text-xs text-slate-400 mt-0.5">All coffee bean scan submissions</p>
   </div>
-  <%= link_to "↓ Export CSV", export_scan_results_admin_path(format: :csv),
+  <%= link_to "↓ Export CSV", admin_export_scan_results_path(format: :csv),
       class: "inline-flex items-center gap-2 bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm" %>
 </div>
 

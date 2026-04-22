@@ -6,7 +6,7 @@
     <title>KopiGrade Admin</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%# Load Chart.js first, then chartkick — chartkick auto-detects window.Chart %>
     <%= javascript_include_tag "Chart.bundle", defer: false %>
     <%= javascript_include_tag "chartkick", defer: false %>
