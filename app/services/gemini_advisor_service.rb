@@ -26,8 +26,8 @@ class GeminiAdvisorService
     end
 
     response = GEMINI_CLIENT.generate_content({
-      systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      contents: [{ role: "user", parts: [{ text: build_user_prompt }] }]
+      systemInstruction: { parts: [ { text: SYSTEM_INSTRUCTION } ] },
+      contents: [ { role: "user", parts: [ { text: build_user_prompt } ] } ]
     })
     advice_text = response.dig("candidates", 0, "content", "parts", 0, "text")
     raise "Empty Gemini response" if advice_text.blank?

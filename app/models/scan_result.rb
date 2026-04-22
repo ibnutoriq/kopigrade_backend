@@ -19,7 +19,7 @@ class ScanResult < ApplicationRecord
   validates :variety, inclusion: { in: VARIETIES }
   validates :sub_district,
             inclusion: {
-              in: -> (_record) { ReverseGeocodingService.all_sub_districts },
+              in: ->(_record) { ReverseGeocodingService.all_sub_districts },
               message: :invalid_sub_district
             },
             allow_blank: true
