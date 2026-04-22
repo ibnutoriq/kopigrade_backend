@@ -6,5 +6,5 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 
-pin "chartkick", to: "chartkick.esm.js"
-pin "Chart.bundle", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+# chartkick and Chart.bundle.js are loaded as plain scripts in the admin layout,
+# not through importmap — chartkick auto-detects window.Chart when loaded in order.
