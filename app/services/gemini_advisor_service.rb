@@ -8,7 +8,7 @@ class GeminiAdvisorService
     (1) Grade SNI: sebutkan grade, artinya secara komersial, dan ingatkan bahwa estimasi hanya mencakup biji hitam dan biji pecah. \
     (2) Saran pasca panen: 1–2 tindakan konkret untuk mengurangi cacat dominan, disesuaikan iklim Banyuwangi. \
     (3) Harga: kisaran harga realistis hari ini berdasarkan grade dan kelayakan ekspor ICO 407 — satu angka konkret. \
-    Total maksimal 100 kata.
+    Total maksimal 130 kata.
   INST
 
   TIMEOUT_SECONDS = 15
