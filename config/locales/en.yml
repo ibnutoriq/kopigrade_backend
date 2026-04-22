@@ -1,0 +1,56 @@
+en:
+  api:
+    errors:
+      unauthorized: "Unauthorized. Please provide a valid API token."
+      internal_server_error: "An internal error occurred. Please try again later."
+      bad_request: "Bad request."
+    scan_results:
+      partial_coverage_notice: >-
+        SNI estimate is based on black beans and broken beans only;
+        other defect types are not yet detected by the app.
+    market_prices:
+      not_found: "No price found for %{variety}."
+      invalid_variety: "Invalid variety. Use 'robusta' or 'arabika'."
+
+  sni:
+    grades:
+      Mutu 1: "Mutu 1 (defect ≤ 11)"
+      Mutu 2: "Mutu 2 (defect 12–25)"
+      Mutu 3: "Mutu 3 (defect 26–44)"
+      Mutu 4a: "Mutu 4a (defect 45–60)"
+      Mutu 4b: "Mutu 4b (defect 61–80)"
+      Mutu 4: "Mutu 4 (defect 45–80)"
+      Mutu 5: "Mutu 5 (defect 81–150)"
+      Mutu 6: "Mutu 6 (defect 151–225)"
+      Di luar mutu: "Below grade (defect > 225)"
+
+  activerecord:
+    errors:
+      models:
+        scan_result:
+          attributes:
+            total_beans:
+              blank: "cannot be blank"
+              not_a_number: "must be a number"
+              not_an_integer: "must be a whole number"
+              greater_than: "must be greater than %{count}"
+              less_than_or_equal_to: "must be at most %{count}"
+            black_defects:
+              blank: "cannot be blank"
+              not_an_integer: "must be a whole number"
+              greater_than_or_equal_to: "must be at least %{count}"
+              cannot_exceed_total: "cannot exceed total beans"
+            broken_defects:
+              blank: "cannot be blank"
+              not_an_integer: "must be a whole number"
+              greater_than_or_equal_to: "must be at least %{count}"
+              cannot_exceed_total: "cannot exceed total beans"
+            latitude:
+              out_of_bounds: "must be within the Banyuwangi region"
+            longitude:
+              out_of_bounds: "must be within the Banyuwangi region"
+            variety:
+              blank: "cannot be blank"
+              inclusion: "must be 'robusta' or 'arabika'"
+          base:
+            defects_exceed_total: "sum of black and broken defects cannot exceed total beans"

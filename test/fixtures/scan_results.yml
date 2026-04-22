@@ -1,0 +1,26 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_id: device-fixture-1
+  total_beans: 500
+  black_defects: 5
+  broken_defects: 10
+  latitude: -8.2191
+  longitude: 114.0112
+  sub_district: Glenmore
+  variety: robusta
+  status: pending
+  scanned_at: <%= Time.current.iso8601 %>
+
+two:
+  device_id: device-fixture-2
+  total_beans: 300
+  black_defects: 2
+  broken_defects: 5
+  latitude: -8.30
+  longitude: 114.10
+  sub_district: Kalibaru
+  variety: arabika
+  status: analyzed
+  advice: Kualitas kopi Anda tergolong baik.
+  scanned_at: <%= Time.current.iso8601 %>

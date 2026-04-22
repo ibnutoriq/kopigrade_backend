@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KopiGrade Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <nav class="bg-amber-900 text-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-bold tracking-wide">KopiGrade</span>
+            <span class="text-amber-300 text-sm font-medium">Admin</span>
+          </div>
+          <div class="hidden md:flex items-center gap-4 text-sm">
+            <%= link_to "Dashboard", admin_dashboard_path, class: "text-amber-200 hover:text-white transition" %>
+            <%= link_to "Scan Results", admin_scan_results_path, class: "text-amber-200 hover:text-white transition" %>
+            <%= link_to "Market Prices", admin_market_prices_path, class: "text-amber-200 hover:text-white transition" %>
+            <%= link_to "Users", admin_users_path, class: "text-amber-200 hover:text-white transition" %>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 text-sm">
+          <span class="text-amber-200"><%= Current.user&.email_address %></span>
+          <%= button_to "Sign out", session_path, method: :delete,
+                class: "bg-amber-700 hover:bg-amber-600 px-3 py-1 rounded transition" %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <% if notice.present? %>
+        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded"><%= notice %></div>
+      <% end %>
+      <% if alert.present? %>
+        <div class="mb-4 p-3 bg-red-100 text-red-800 rounded"><%= alert %></div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </body>
+</html>

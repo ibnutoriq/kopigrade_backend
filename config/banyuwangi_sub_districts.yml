@@ -1,0 +1,153 @@
+# Approximate bounding boxes for Banyuwangi's 25 sub-districts (kecamatan).
+# lat/lng are WGS84. Boxes are intentionally overlapping at borders — first match wins.
+# Data sourced from OpenStreetMap administrative boundaries (approximate).
+sub_districts:
+  - name: "Kalibaru"
+    lat_min: -8.36
+    lat_max: -8.24
+    lon_min: 113.97
+    lon_max: 114.10
+
+  - name: "Glenmore"
+    lat_min: -8.30
+    lat_max: -8.18
+    lon_min: 114.03
+    lon_max: 114.18
+
+  - name: "Genteng"
+    lat_min: -8.38
+    lat_max: -8.26
+    lon_min: 114.12
+    lon_max: 114.24
+
+  - name: "Srono"
+    lat_min: -8.45
+    lat_max: -8.33
+    lon_min: 114.17
+    lon_max: 114.29
+
+  - name: "Cluring"
+    lat_min: -8.47
+    lat_max: -8.35
+    lon_min: 114.21
+    lon_max: 114.33
+
+  - name: "Gambiran"
+    lat_min: -8.44
+    lat_max: -8.32
+    lon_min: 114.26
+    lon_max: 114.36
+
+  - name: "Tegaldlimo"
+    lat_min: -8.56
+    lat_max: -8.42
+    lon_min: 114.22
+    lon_max: 114.40
+
+  - name: "Purwoharjo"
+    lat_min: -8.50
+    lat_max: -8.38
+    lon_min: 114.30
+    lon_max: 114.44
+
+  - name: "Bangorejo"
+    lat_min: -8.48
+    lat_max: -8.36
+    lon_min: 114.12
+    lon_max: 114.26
+
+  - name: "Siliragung"
+    lat_min: -8.56
+    lat_max: -8.44
+    lon_min: 114.30
+    lon_max: 114.46
+
+  - name: "Pesanggaran"
+    lat_min: -8.62
+    lat_max: -8.50
+    lon_min: 114.19
+    lon_max: 114.38
+
+  - name: "Sempu"
+    lat_min: -8.29
+    lat_max: -8.17
+    lon_min: 114.11
+    lon_max: 114.24
+
+  - name: "Songgon"
+    lat_min: -8.23
+    lat_max: -8.11
+    lon_min: 114.16
+    lon_max: 114.30
+
+  - name: "Singojuruh"
+    lat_min: -8.30
+    lat_max: -8.19
+    lon_min: 114.24
+    lon_max: 114.35
+
+  - name: "Rogojampi"
+    lat_min: -8.32
+    lat_max: -8.22
+    lon_min: 114.28
+    lon_max: 114.40
+
+  - name: "Kabat"
+    lat_min: -8.26
+    lat_max: -8.16
+    lon_min: 114.29
+    lon_max: 114.42
+
+  - name: "Licin"
+    lat_min: -8.22
+    lat_max: -8.10
+    lon_min: 114.35
+    lon_max: 114.50
+
+  - name: "Banyuwangi"
+    lat_min: -8.24
+    lat_max: -8.14
+    lon_min: 114.34
+    lon_max: 114.44
+
+  - name: "Giri"
+    lat_min: -8.20
+    lat_max: -8.11
+    lon_min: 114.39
+    lon_max: 114.47
+
+  - name: "Kalipuro"
+    lat_min: -8.16
+    lat_max: -8.06
+    lon_min: 114.37
+    lon_max: 114.47
+
+  - name: "Wongsorejo"
+    lat_min: -8.08
+    lat_max: -7.93
+    lon_min: 114.37
+    lon_max: 114.51
+
+  - name: "Muncar"
+    lat_min: -8.43
+    lat_max: -8.31
+    lon_min: 114.32
+    lon_max: 114.46
+
+  - name: "Tegalsari"
+    lat_min: -8.40
+    lat_max: -8.28
+    lon_min: 114.10
+    lon_max: 114.24
+
+  - name: "Genteng Timur"
+    lat_min: -8.37
+    lat_max: -8.26
+    lon_min: 114.24
+    lon_max: 114.36
+
+  - name: "Blimbingsari"
+    lat_min: -8.30
+    lat_max: -8.20
+    lon_min: 114.39
+    lon_max: 114.51

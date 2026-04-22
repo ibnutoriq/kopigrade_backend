@@ -1,0 +1,37 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Pengguna Admin</h1>
+  <%= link_to "Tambah Pengguna", new_admin_user_path,
+      class: "bg-amber-700 hover:bg-amber-600 text-white px-4 py-2 rounded text-sm" %>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+      <tr>
+        <th class="px-6 py-3 text-left">Email</th>
+        <th class="px-6 py-3 text-left">Role</th>
+        <th class="px-6 py-3 text-left">Dibuat</th>
+        <th class="px-6 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @users.each do |user| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-3 font-medium text-gray-800"><%= user.email_address %></td>
+          <td class="px-6 py-3">
+            <%= user.admin? ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">Admin</span>'.html_safe : '<span class="text-gray-500 text-xs">Staff</span>'.html_safe %>
+          </td>
+          <td class="px-6 py-3 text-gray-400"><%= user.created_at.strftime("%d %b %Y") %></td>
+          <td class="px-6 py-3 flex gap-3">
+            <%= link_to "Edit", edit_admin_user_path(user), class: "text-amber-700 hover:underline text-xs" %>
+            <% unless user == Current.user %>
+              <%= button_to "Hapus", admin_user_path(user), method: :delete,
+                  data: { turbo_confirm: "Hapus pengguna ini?" },
+                  class: "text-red-500 hover:underline text-xs bg-transparent border-0 cursor-pointer" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,59 @@
+<div class="mb-4">
+  <%= link_to "← Back", admin_scan_results_path, class: "text-sm text-amber-700 hover:underline" %>
+</div>
+
+<h1 class="text-2xl font-bold text-gray-800 mb-6">Scan #<%= @scan_result.id %></h1>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-base font-semibold text-gray-700 mb-4">Scan Details</h2>
+    <dl class="space-y-2 text-sm">
+      <div class="flex justify-between"><dt class="text-gray-500">Device ID</dt><dd class="font-mono text-gray-700"><%= @scan_result.device_id %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Variety</dt><dd class="capitalize font-medium"><%= @scan_result.variety %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Sub-District</dt><dd><%= @scan_result.sub_district || "—" %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Total Beans</dt><dd><%= @scan_result.total_beans %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Black Defects</dt><dd><%= @scan_result.black_defects %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Broken Defects</dt><dd><%= @scan_result.broken_defects %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Defect Rate</dt><dd><%= @scan_result.defect_rate.round(2) %>%</dd></div>
+      <hr class="my-2"/>
+      <div class="flex justify-between"><dt class="text-gray-500">SNI Defect Value (est.)</dt><dd class="font-bold text-amber-800"><%= @scan_result.sni_defect_value %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">SNI Grade</dt><dd class="font-bold text-amber-800"><%= @scan_result.sni_grade_label %></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Export Eligible (ICO 407)</dt>
+        <dd><%= @scan_result.export_eligible? ? '<span class="text-green-600 font-medium">Yes</span>'.html_safe : '<span class="text-red-500">No</span>'.html_safe %></dd></div>
+      <hr class="my-2"/>
+      <div class="flex justify-between"><dt class="text-gray-500">Status</dt>
+        <dd><span class="px-2 py-0.5 rounded-full text-xs font-semibold
+          <%= @scan_result.pending? ? 'bg-yellow-100 text-yellow-700' :
+              @scan_result.analyzed? ? 'bg-green-100 text-green-700' :
+                                       'bg-red-100 text-red-700' %>">
+          <%= @scan_result.status %>
+        </span></dd></div>
+      <div class="flex justify-between"><dt class="text-gray-500">Scanned At</dt><dd class="text-gray-500"><%= @scan_result.scanned_at&.strftime("%d %b %Y %H:%M") || @scan_result.created_at.strftime("%d %b %Y %H:%M") %></dd></div>
+    </dl>
+    <p class="mt-4 text-xs text-gray-400 italic"><%= SniGrading::PARTIAL_COVERAGE_NOTICE %></p>
+  </div>
+
+  <% if @scan_result.latitude && @scan_result.longitude %>
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <h2 class="text-base font-semibold text-gray-700 p-4 pb-0">Location</h2>
+      <div class="p-4">
+        <p class="text-sm text-gray-500 mb-2">Lat: <%= @scan_result.latitude %>, Lon: <%= @scan_result.longitude %></p>
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=<%= @scan_result.longitude.to_f - 0.05 %>,<%= @scan_result.latitude.to_f - 0.05 %>,<%= @scan_result.longitude.to_f + 0.05 %>,<%= @scan_result.latitude.to_f + 0.05 %>&layer=mapnik&marker=<%= @scan_result.latitude %>,<%= @scan_result.longitude %>"
+          width="100%" height="250" class="rounded border border-gray-200"
+          loading="lazy"></iframe>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @scan_result.advice.present? %>
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-base font-semibold text-gray-700 mb-3">AI Advice (Gemini)</h2>
+    <div class="prose prose-sm max-w-none text-gray-700 whitespace-pre-line"><%= @scan_result.advice %></div>
+  </div>
+<% elsif @scan_result.failed? && @scan_result.error_message.present? %>
+  <div class="bg-red-50 rounded-xl p-4 text-red-700 text-sm">
+    <strong>Error:</strong> <%= @scan_result.error_message %>
+  </div>
+<% end %>

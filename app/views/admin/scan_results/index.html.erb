@@ -1,0 +1,82 @@
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Scan Results</h1>
+  <%= link_to "Export CSV", export_scan_results_admin_path(format: :csv),
+      class: "bg-amber-700 hover:bg-amber-600 text-white px-4 py-2 rounded text-sm" %>
+</div>
+
+<%= form_with url: admin_scan_results_path, method: :get,
+              data: { turbo_frame: "scan_results_table" },
+              class: "bg-white rounded-xl shadow p-4 mb-6 flex flex-wrap gap-3" do |f| %>
+  <%= f.select :sub_district,
+       options_for_select([["All Sub-Districts", ""]] + ScanResult.distinct.pluck(:sub_district).compact.sort.map { |s| [s, s] }, params[:sub_district]),
+       {}, class: "border border-gray-200 rounded px-3 py-2 text-sm" %>
+  <%= f.select :status,
+       options_for_select([["All Statuses", ""], ["Pending", "pending"], ["Analyzed", "analyzed"], ["Failed", "failed"]], params[:status]),
+       {}, class: "border border-gray-200 rounded px-3 py-2 text-sm" %>
+  <%= f.select :sni_grade,
+       options_for_select([["All Grades", ""]] + %w[Mutu\ 1 Mutu\ 2 Mutu\ 3 Mutu\ 4a Mutu\ 4b Mutu\ 4 Mutu\ 5 Mutu\ 6].map { |g| [g, g] }, params[:sni_grade]),
+       {}, class: "border border-gray-200 rounded px-3 py-2 text-sm" %>
+  <%= f.date_field :from, value: params[:from], class: "border border-gray-200 rounded px-3 py-2 text-sm" %>
+  <%= f.date_field :to, value: params[:to], class: "border border-gray-200 rounded px-3 py-2 text-sm" %>
+  <%= f.submit "Filter", class: "bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm cursor-pointer" %>
+  <%= link_to "Reset", admin_scan_results_path, class: "text-sm text-gray-500 hover:underline self-center" %>
+<% end %>
+
+<turbo-frame id="scan_results_table">
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <% if @scan_results.empty? %>
+      <p class="px-6 py-10 text-center text-gray-400">No scan results found.</p>
+    <% else %>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3 text-left">ID</th>
+            <th class="px-4 py-3 text-left">Device</th>
+            <th class="px-4 py-3 text-left">Sub-District</th>
+            <th class="px-4 py-3 text-left">Variety</th>
+            <th class="px-4 py-3 text-left">Beans</th>
+            <th class="px-4 py-3 text-left">SNI Grade</th>
+            <th class="px-4 py-3 text-left">Export</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Date</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @scan_results.each do |scan| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 text-gray-400">#<%= scan.id %></td>
+              <td class="px-4 py-3 text-gray-500 font-mono text-xs"><%= scan.device_id&.truncate(10) %></td>
+              <td class="px-4 py-3 font-medium text-gray-800"><%= scan.sub_district || "—" %></td>
+              <td class="px-4 py-3 capitalize"><%= scan.variety %></td>
+              <td class="px-4 py-3"><%= scan.total_beans %></td>
+              <td class="px-4 py-3 font-semibold text-amber-800"><%= scan.sni_grade || "—" %></td>
+              <td class="px-4 py-3">
+                <% if scan.export_eligible? %>
+                  <span class="text-green-600 font-medium">Yes</span>
+                <% elsif scan.export_eligible == false %>
+                  <span class="text-red-500">No</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3">
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                  <%= scan.pending? ? 'bg-yellow-100 text-yellow-700' :
+                      scan.analyzed? ? 'bg-green-100 text-green-700' :
+                                       'bg-red-100 text-red-700' %>">
+                  <%= scan.status %>
+                </span>
+              </td>
+              <td class="px-4 py-3 text-gray-400"><%= scan.created_at.strftime("%d %b %Y") %></td>
+              <td class="px-4 py-3 flex gap-2">
+                <%= link_to "View", admin_scan_result_path(scan), class: "text-amber-700 hover:underline text-xs" %>
+                <%= button_to "Delete", admin_scan_result_path(scan), method: :delete,
+                    data: { turbo_confirm: "Delete this scan result?" },
+                    class: "text-red-500 hover:underline text-xs bg-transparent border-0 cursor-pointer" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</turbo-frame>

@@ -1,0 +1,88 @@
+<h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
+
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+  <%= render "admin/dashboard/metric_card", label: "Scans This Month", value: @total_scans_mtd, color: "amber" %>
+  <%= render "admin/dashboard/metric_card", label: "Avg SNI Defect Value", value: @avg_defect_value_mtd, color: "blue" %>
+  <%= render "admin/dashboard/metric_card", label: "Unique Devices", value: @unique_devices_mtd, color: "purple" %>
+  <%= render "admin/dashboard/metric_card", label: "Export Eligible (%)", value: "#{@export_eligible_pct}%", color: "green" %>
+  <div class="bg-white rounded-xl shadow p-4 col-span-2 md:col-span-1">
+    <p class="text-xs text-gray-500 mb-1">Today's Market Prices</p>
+    <% if @latest_robusta_price %>
+      <p class="text-sm font-medium text-gray-700">Robusta: <span class="text-amber-700 font-bold">Rp <%= number_with_delimiter(@latest_robusta_price.price) %>/kg</span></p>
+    <% end %>
+    <% if @latest_arabika_price %>
+      <p class="text-sm font-medium text-gray-700">Arabika: <span class="text-green-700 font-bold">Rp <%= number_with_delimiter(@latest_arabika_price.price) %>/kg</span></p>
+    <% end %>
+    <% unless @latest_robusta_price || @latest_arabika_price %>
+      <p class="text-sm text-gray-400">No price data yet</p>
+    <% end %>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-base font-semibold text-gray-700 mb-4">Daily Scan Volume (last 30 days)</h2>
+    <%= line_chart @daily_scans, height: "200px", colors: ["#b45309"] %>
+  </div>
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-base font-semibold text-gray-700 mb-4">SNI Grade Distribution This Month</h2>
+    <%= pie_chart @grade_distribution, height: "200px" %>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow p-6 mb-8">
+  <h2 class="text-base font-semibold text-gray-700 mb-4">Avg Defect Value by Sub-District (Top 10)</h2>
+  <%= bar_chart @defect_by_subdistrict, height: "200px", colors: ["#92400e"] %>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+    <h2 class="text-lg font-semibold text-gray-700">Latest Scans</h2>
+    <%= link_to "View All", admin_scan_results_path, class: "text-sm text-amber-700 hover:underline" %>
+  </div>
+  <% if @latest_scans.empty? %>
+    <p class="px-6 py-8 text-center text-gray-400">No scan results yet.</p>
+  <% else %>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+        <tr>
+          <th class="px-6 py-3 text-left">ID</th>
+          <th class="px-6 py-3 text-left">Sub-District</th>
+          <th class="px-6 py-3 text-left">Variety</th>
+          <th class="px-6 py-3 text-left">SNI Grade</th>
+          <th class="px-6 py-3 text-left">Export Eligible</th>
+          <th class="px-6 py-3 text-left">Status</th>
+          <th class="px-6 py-3 text-left">Time</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @latest_scans.each do |scan| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-3 text-gray-400">#<%= scan.id %></td>
+            <td class="px-6 py-3 font-medium text-gray-800"><%= scan.sub_district || "—" %></td>
+            <td class="px-6 py-3 capitalize"><%= scan.variety %></td>
+            <td class="px-6 py-3 font-semibold text-amber-800"><%= scan.sni_grade || "—" %></td>
+            <td class="px-6 py-3">
+              <% if scan.export_eligible? %>
+                <span class="text-green-600 font-medium">Yes</span>
+              <% elsif scan.export_eligible == false %>
+                <span class="text-red-500">No</span>
+              <% else %>
+                <span class="text-gray-400">—</span>
+              <% end %>
+            </td>
+            <td class="px-6 py-3">
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                <%= scan.pending? ? 'bg-yellow-100 text-yellow-700' :
+                    scan.analyzed? ? 'bg-green-100 text-green-700' :
+                                     'bg-red-100 text-red-700' %>">
+                <%= scan.status %>
+              </span>
+            </td>
+            <td class="px-6 py-3 text-gray-400"><%= scan.created_at.strftime("%d %b %Y %H:%M") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

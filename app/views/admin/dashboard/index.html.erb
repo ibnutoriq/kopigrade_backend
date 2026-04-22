@@ -1,0 +1,70 @@
+<h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
+    <div class="bg-amber-100 p-3 rounded-full">
+      <svg class="w-7 h-7 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0" />
+      </svg>
+    </div>
+    <div>
+      <p class="text-sm text-gray-500">Total Users</p>
+      <p class="text-3xl font-bold text-gray-800"><%= @total_users %></p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
+    <div class="bg-green-100 p-3 rounded-full">
+      <svg class="w-7 h-7 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+    </div>
+    <div>
+      <p class="text-sm text-gray-500">Total Scans</p>
+      <p class="text-3xl font-bold text-gray-800"><%= ScanResult.count %></p>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-semibold text-gray-700">Latest Scans</h2>
+  </div>
+  <% if @latest_scans.empty? %>
+    <p class="px-6 py-8 text-center text-gray-400">No scan results yet.</p>
+  <% else %>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+        <tr>
+          <th class="px-6 py-3 text-left">ID</th>
+          <th class="px-6 py-3 text-left">Sub-District</th>
+          <th class="px-6 py-3 text-left">Total Beans</th>
+          <th class="px-6 py-3 text-left">Defects (Black / Broken)</th>
+          <th class="px-6 py-3 text-left">Status</th>
+          <th class="px-6 py-3 text-left">Created</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @latest_scans.each do |scan| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-3 text-gray-400">#<%= scan.id %></td>
+            <td class="px-6 py-3 font-medium text-gray-800"><%= scan.sub_district || "—" %></td>
+            <td class="px-6 py-3"><%= scan.total_beans %></td>
+            <td class="px-6 py-3"><%= scan.black_defects %> / <%= scan.broken_defects %></td>
+            <td class="px-6 py-3">
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                <%= scan.pending? ? 'bg-yellow-100 text-yellow-700' :
+                    scan.graded? ? 'bg-green-100 text-green-700' :
+                                   'bg-red-100 text-red-700' %>">
+                <%= scan.status %>
+              </span>
+            </td>
+            <td class="px-6 py-3 text-gray-400"><%= scan.created_at.strftime("%d %b %Y %H:%M") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

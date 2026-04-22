@@ -1,0 +1,10 @@
+class Admin::BaseController < ApplicationController
+  layout "admin"
+  before_action :require_admin
+
+  private
+
+  def require_admin
+    redirect_to new_session_path, alert: "Not authorized." unless Current.user&.admin?
+  end
+end

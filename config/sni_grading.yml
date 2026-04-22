@@ -1,0 +1,41 @@
+shared:
+  # Reference bean count per 300g sample (used to extrapolate from arbitrary sample size)
+  reference_beans_per_300g:
+    robusta: 1800
+    arabika: 2000
+
+  # Export eligibility thresholds per ICO Resolution 407 (defect value per 300g)
+  export_thresholds:
+    robusta: 150
+    arabika: 86
+
+  # Grade thresholds — max defect value for each mutu (inclusive upper bound)
+  # Robusta uses 4a/4b split; Arabika uses merged Mutu 4
+  grade_thresholds:
+    robusta:
+      - { grade: "Mutu 1",  max: 11 }
+      - { grade: "Mutu 2",  max: 25 }
+      - { grade: "Mutu 3",  max: 44 }
+      - { grade: "Mutu 4a", max: 60 }
+      - { grade: "Mutu 4b", max: 80 }
+      - { grade: "Mutu 5",  max: 150 }
+      - { grade: "Mutu 6",  max: 225 }
+    arabika:
+      - { grade: "Mutu 1", max: 11 }
+      - { grade: "Mutu 2", max: 25 }
+      - { grade: "Mutu 3", max: 44 }
+      - { grade: "Mutu 4", max: 80 }
+      - { grade: "Mutu 5", max: 150 }
+      - { grade: "Mutu 6", max: 225 }
+
+  # Human-readable labels for each grade (used in API responses and Gemini prompt)
+  grade_labels:
+    "Mutu 1":  "Mutu 1 (cacat ≤ 11)"
+    "Mutu 2":  "Mutu 2 (cacat 12–25)"
+    "Mutu 3":  "Mutu 3 (cacat 26–44)"
+    "Mutu 4a": "Mutu 4a (cacat 45–60)"
+    "Mutu 4b": "Mutu 4b (cacat 61–80)"
+    "Mutu 4":  "Mutu 4 (cacat 45–80)"
+    "Mutu 5":  "Mutu 5 (cacat 81–150)"
+    "Mutu 6":  "Mutu 6 (cacat 151–225)"
+    "Di luar mutu": "Di luar mutu (cacat > 225)"

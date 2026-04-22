@@ -1,0 +1,30 @@
+<%= form_with model: [:admin, market_price], class: "space-y-4" do |f| %>
+  <% if market_price.errors.any? %>
+    <div class="bg-red-50 text-red-700 p-3 rounded text-sm">
+      <ul class="list-disc list-inside">
+        <% market_price.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :variety, "Varietas", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.select :variety, [["Robusta", "robusta"], ["Arabika", "arabika"]],
+        {}, class: "w-full border border-gray-300 rounded px-3 py-2 text-sm" %>
+  </div>
+  <div>
+    <%= f.label :price, "Harga (Rp/kg)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.number_field :price, min: 1, class: "w-full border border-gray-300 rounded px-3 py-2 text-sm" %>
+  </div>
+  <div>
+    <%= f.label :price_date, "Tanggal", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.date_field :price_date, class: "w-full border border-gray-300 rounded px-3 py-2 text-sm" %>
+  </div>
+  <div>
+    <%= f.label :source_url, "URL Sumber (opsional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.url_field :source_url, class: "w-full border border-gray-300 rounded px-3 py-2 text-sm" %>
+  </div>
+  <%= f.submit "Simpan", class: "bg-amber-700 hover:bg-amber-600 text-white px-6 py-2 rounded cursor-pointer" %>
+<% end %>

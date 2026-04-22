@@ -1,0 +1,56 @@
+id:
+  api:
+    errors:
+      unauthorized: "Tidak terotorisasi. Harap sertakan token API yang valid."
+      internal_server_error: "Terjadi kesalahan internal. Silakan coba lagi."
+      bad_request: "Permintaan tidak valid."
+    scan_results:
+      partial_coverage_notice: >-
+        Estimasi SNI hanya berdasarkan biji hitam dan biji pecah;
+        jenis cacat lain belum terdeteksi oleh aplikasi.
+    market_prices:
+      not_found: "Harga tidak ditemukan untuk %{variety}."
+      invalid_variety: "Varietas tidak valid. Gunakan 'robusta' atau 'arabika'."
+
+  sni:
+    grades:
+      Mutu 1: "Mutu 1 (cacat ≤ 11)"
+      Mutu 2: "Mutu 2 (cacat 12–25)"
+      Mutu 3: "Mutu 3 (cacat 26–44)"
+      Mutu 4a: "Mutu 4a (cacat 45–60)"
+      Mutu 4b: "Mutu 4b (cacat 61–80)"
+      Mutu 4: "Mutu 4 (cacat 45–80)"
+      Mutu 5: "Mutu 5 (cacat 81–150)"
+      Mutu 6: "Mutu 6 (cacat 151–225)"
+      Di luar mutu: "Di luar mutu (cacat > 225)"
+
+  activerecord:
+    errors:
+      models:
+        scan_result:
+          attributes:
+            total_beans:
+              blank: "tidak boleh kosong"
+              not_a_number: "harus berupa angka"
+              not_an_integer: "harus berupa bilangan bulat"
+              greater_than: "harus lebih besar dari %{count}"
+              less_than_or_equal_to: "maksimal %{count}"
+            black_defects:
+              blank: "tidak boleh kosong"
+              not_an_integer: "harus berupa bilangan bulat"
+              greater_than_or_equal_to: "minimal %{count}"
+              cannot_exceed_total: "tidak boleh melebihi jumlah total biji"
+            broken_defects:
+              blank: "tidak boleh kosong"
+              not_an_integer: "harus berupa bilangan bulat"
+              greater_than_or_equal_to: "minimal %{count}"
+              cannot_exceed_total: "tidak boleh melebihi jumlah total biji"
+            latitude:
+              out_of_bounds: "harus berada di wilayah Banyuwangi"
+            longitude:
+              out_of_bounds: "harus berada di wilayah Banyuwangi"
+            variety:
+              blank: "tidak boleh kosong"
+              inclusion: "harus 'robusta' atau 'arabika'"
+          base:
+            defects_exceed_total: "jumlah cacat hitam dan cacat pecah tidak boleh melebihi total biji"

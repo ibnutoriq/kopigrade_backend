@@ -1,0 +1,11 @@
+robusta_today:
+  variety: robusta
+  price: 65000
+  price_date: <%= Date.current.iso8601 %>
+  source_url: https://siskaperbapo.jatimprov.go.id/harga/tabel
+
+arabika_today:
+  variety: arabika
+  price: 92000
+  price_date: <%= Date.current.iso8601 %>
+  source_url: https://siskaperbapo.jatimprov.go.id/harga/tabel
