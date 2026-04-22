@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  root "admin/dashboard#show"
+  root "web/home#show"
+
+  # Public PWA layer
+  scope module: :web, as: :web do
+    resources :scans, only: [ :new, :create, :show ]
+    get "harga",   to: "prices#index",  as: :prices
+    get "tentang", to: "pages#about",   as: :about
+  end
 
   # Rails 8 session-based auth
   resource :session
@@ -11,6 +18,8 @@ Rails.application.routes.draw do
       resources :market_prices, only: [ :index ]
     end
   end
+
+  get "/admin", to: redirect("/admin/dashboard")
 
   namespace :admin do
     get "dashboard", to: "dashboard#show"

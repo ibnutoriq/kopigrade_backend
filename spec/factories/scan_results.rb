@@ -7,6 +7,7 @@ FactoryBot.define do
     broken_defects { 10 }
     latitude      { -8.2191 }
     longitude     { 114.0112 }
+    sub_district  { "Glenmore" }
     variety       { "robusta" }
     scanned_at    { Time.current }
 

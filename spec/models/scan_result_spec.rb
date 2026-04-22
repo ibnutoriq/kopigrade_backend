@@ -53,6 +53,24 @@ RSpec.describe ScanResult, type: :model do
     it "rejects unknown variety enum values" do
       expect { build(:scan_result, variety: "liberica") }.to raise_error(ArgumentError)
     end
+
+    describe "sub_district inclusion" do
+      let(:valid_sub_district) { ReverseGeocodingService.all_sub_districts.first }
+
+      it "is valid with a known sub_district" do
+        expect(build(:scan_result, sub_district: valid_sub_district)).to be_valid
+      end
+
+      it "is invalid with an unknown sub_district" do
+        scan = build(:scan_result, sub_district: "Desa Palsu")
+        expect(scan).not_to be_valid
+        expect(scan.errors[:sub_district]).not_to be_empty
+      end
+
+      it "is valid when sub_district is blank" do
+        expect(build(:scan_result, sub_district: nil)).to be_valid
+      end
+    end
   end
 
   # ── SNI Grading — Robusta ───────────────────────────────────────────────────

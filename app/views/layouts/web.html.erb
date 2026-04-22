@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#78350f">
+
+    <title>KopiGrade — Cek Mutu Kopi Anda</title>
+
+    <%# PWA %>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="KopiGrade">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-stone-50 text-stone-900 min-h-screen flex flex-col">
+    <%# Top bar %>
+    <header class="bg-amber-900 text-white shadow-sm">
+      <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+        <%= link_to root_path, class: "flex items-center gap-2 font-bold text-lg" do %>
+          <span class="text-2xl">&#9749;</span>
+          <span>KopiGrade</span>
+        <% end %>
+        <%= link_to "Harga Kopi", web_prices_path, class: "text-sm text-amber-200 hover:text-white" %>
+      </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 py-6 w-full flex-1">
+      <%= yield %>
+    </main>
+
+    <footer class="border-t border-stone-200 mt-8 py-4 text-center text-sm text-stone-500">
+      Dibuat untuk petani kopi Banyuwangi &middot;
+      <%= link_to "Tentang KopiGrade", web_about_path, class: "underline hover:text-stone-700" %>
+    </footer>
+  </body>
+</html>

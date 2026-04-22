@@ -1,0 +1,122 @@
+<% if @scan.pending? && !scan_pending_too_long?(@scan) %>
+  <meta http-equiv="refresh" content="3">
+<% end %>
+
+<%# Input summary (always visible) %>
+<div class="bg-stone-100 rounded-xl p-3 mb-5 text-sm text-stone-600">
+  <span class="font-medium"><%= @scan.variety.capitalize %></span> &middot;
+  <%= @scan.total_beans %> biji &middot;
+  Hitam: <%= @scan.black_defects %> &middot;
+  Pecah: <%= @scan.broken_defects %>
+  <% if @scan.sub_district.present? %>
+    &middot; <%= @scan.sub_district %>
+  <% end %>
+</div>
+
+<% if @scan.pending? %>
+  <% if scan_pending_too_long?(@scan) %>
+    <%# Pending timeout state — no meta-refresh %>
+    <div class="text-center py-10">
+      <p class="text-4xl mb-4">&#x23F3;</p>
+      <h2 class="text-lg font-semibold text-stone-800 mb-2">Analisa lebih lama dari biasanya</h2>
+      <p class="text-sm text-stone-500 mb-6">Koneksi atau layanan AI sedang sibuk. Anda bisa menunggu atau coba lagi.</p>
+      <div class="space-y-3">
+        <%= link_to "Muat Ulang Halaman", web_scan_path(@scan),
+              class: "block w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-4 px-6 rounded-xl text-lg text-center transition-colors" %>
+        <%= link_to "Kirim Ulang", new_web_scan_path,
+              class: "block w-full border-2 border-amber-700 text-amber-700 font-semibold py-4 px-6 rounded-xl text-lg text-center hover:bg-amber-50 transition-colors" %>
+      </div>
+    </div>
+  <% else %>
+    <%# Normal pending state — spinner + meta-refresh active %>
+    <div class="text-center py-10">
+      <div class="flex justify-center mb-4">
+        <div class="w-12 h-12 border-4 border-amber-700 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+      <h2 class="text-lg font-semibold text-stone-800 mb-2">Sedang menganalisa...</h2>
+      <p class="text-sm text-stone-500">Saran AI sedang disiapkan. Halaman akan otomatis diperbarui.</p>
+    </div>
+  <% end %>
+
+<% elsif @scan.analyzed? %>
+  <%# Grade card %>
+  <%
+    grade_classes = case @scan.sni_grade
+    when /Mutu [12]/ then { ring: "bg-emerald-100 border-emerald-400", text: "text-emerald-700" }
+    when /Mutu [34]/ then { ring: "bg-amber-100 border-amber-400",   text: "text-amber-700" }
+    else                  { ring: "bg-red-100 border-red-400",        text: "text-red-700" }
+    end
+  %>
+  <div class="bg-white rounded-xl border border-stone-200 shadow-sm p-5 mb-4">
+    <h2 class="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3">Estimasi Mutu SNI</h2>
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center <%= grade_classes[:ring] %>">
+        <span class="font-bold text-lg <%= grade_classes[:text] %>">
+          <%= @scan.sni_grade.to_s.split.last %>
+        </span>
+      </div>
+      <div>
+        <p class="text-xl font-bold text-stone-900"><%= @scan.sni_grade %></p>
+        <p class="text-sm text-stone-500">Nilai cacat: <%= @scan.sni_defect_value %></p>
+        <% if @scan.export_eligible? %>
+          <span class="inline-block mt-1 bg-emerald-100 text-emerald-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+            ✓ Layak ekspor (ICO 407)
+          </span>
+        <% end %>
+      </div>
+    </div>
+    <p class="mt-3 text-xs text-stone-400">Estimasi berdasarkan biji hitam dan biji pecah saja</p>
+  </div>
+
+  <%# Advice card %>
+  <% if @scan.advice.present? %>
+    <div class="bg-white rounded-xl border border-stone-200 shadow-sm p-5 mb-4">
+      <h2 class="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3">Saran AI</h2>
+      <div class="text-sm text-stone-800 leading-relaxed whitespace-pre-line"><%= @scan.advice %></div>
+    </div>
+  <% end %>
+
+  <%# Market price card %>
+  <div class="bg-white rounded-xl border border-stone-200 shadow-sm p-5 mb-6">
+    <h2 class="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-2">Harga pasar hari ini</h2>
+    <% if @market_price %>
+      <p class="text-xl font-bold text-stone-900">
+        <%= number_to_currency(@market_price.price, unit: "Rp", separator: ",", delimiter: ".", precision: 0) %>/kg
+      </p>
+      <p class="text-xs text-stone-500 mt-1">
+        <%= @scan.variety.capitalize %> &middot;
+        <%= l(@market_price.price_date, format: :long) %>
+      </p>
+      <p class="text-xs text-stone-400 mt-1">Sumber: Siskaperbapo Jatim</p>
+    <% else %>
+      <p class="text-sm text-stone-400">Harga pasar belum tersedia hari ini.</p>
+    <% end %>
+  </div>
+
+  <%# Actions %>
+  <div class="space-y-3">
+    <%= link_to "Cek Lagi", new_web_scan_path,
+          class: "block w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-4 px-6 rounded-xl text-lg text-center transition-colors" %>
+    <% share_text = ERB::Util.url_encode(
+         "Hasil cek mutu kopi saya di KopiGrade:\n" \
+         "Varietas: #{@scan.variety.capitalize}\n" \
+         "Mutu SNI: #{@scan.sni_grade}\n" \
+         "#{request.base_url}#{web_scan_path(@scan)}"
+       ) %>
+    <a href="https://wa.me/?text=<%= share_text %>"
+       target="_blank" rel="noopener noreferrer"
+       class="block w-full border-2 border-emerald-500 text-emerald-700 font-semibold py-4 px-6 rounded-xl text-lg text-center hover:bg-emerald-50 transition-colors">
+      Bagikan ke WhatsApp
+    </a>
+  </div>
+
+<% else %>
+  <%# Failed state %>
+  <div class="bg-red-50 border border-red-200 rounded-xl p-5 mb-5 text-center">
+    <p class="text-2xl mb-3">&#x26A0;&#xFE0F;</p>
+    <h2 class="text-base font-semibold text-red-800 mb-2">Maaf, ada gangguan saat menyiapkan saran.</h2>
+    <p class="text-sm text-red-600">Silakan coba lagi. Jika masalah berlanjut, coba beberapa menit kemudian.</p>
+  </div>
+  <%= link_to "Coba Lagi", new_web_scan_path,
+        class: "block w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-4 px-6 rounded-xl text-lg text-center transition-colors" %>
+<% end %>

@@ -40,3 +40,4 @@
 # Playwright screenshots and snapshots
 /.playwright-mcp/
 /tmp/playwright/
+/playwright-screenshots/

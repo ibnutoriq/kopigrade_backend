@@ -1,0 +1,47 @@
+<%# Hero section %>
+<div class="text-center py-8">
+  <div class="text-5xl mb-4">&#9749;</div>
+  <h1 class="text-2xl font-bold text-stone-900 leading-tight mb-3">
+    Cek mutu kopi Anda<br>dalam 1 menit
+  </h1>
+  <p class="text-stone-600 text-base leading-relaxed mb-6">
+    Dapat saran pasca-panen dan estimasi harga wajar<br>
+    berdasarkan harga pasar Banyuwangi hari ini.
+  </p>
+  <%= link_to new_web_scan_path,
+        class: "block w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-4 px-6 rounded-xl text-lg text-center transition-colors" do %>
+    Mulai Cek Mutu Kopi
+  <% end %>
+  <% if @weekly_scan_count > 0 %>
+    <p class="mt-3 text-sm text-stone-500">
+      Sudah <%= @weekly_scan_count %> kali dipakai petani minggu ini
+    </p>
+  <% end %>
+</div>
+
+<%# Today's price card %>
+<div class="bg-white rounded-xl border border-stone-200 shadow-sm p-4 mt-2">
+  <h2 class="text-sm font-semibold text-stone-500 uppercase tracking-wide mb-3">Harga kopi hari ini</h2>
+  <div class="grid grid-cols-2 gap-3">
+    <% [["Robusta", @robusta_price], ["Arabika", @arabika_price]].each do |label, price| %>
+      <div class="bg-stone-50 rounded-lg p-3 text-center">
+        <p class="text-xs text-stone-500 mb-1"><%= label %></p>
+        <% if price %>
+          <p class="font-bold text-stone-900 text-sm">
+            <%= number_to_currency(price.price, unit: "Rp", separator: ",", delimiter: ".", precision: 0) %>/kg
+          </p>
+        <% else %>
+          <p class="text-xs text-stone-400">Belum tersedia</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to "Lihat detail harga →", web_prices_path, class: "block mt-3 text-center text-sm text-amber-700 hover:text-amber-900" %>
+</div>
+
+<%# About link %>
+<div class="mt-6 text-center">
+  <%= link_to web_about_path, class: "text-sm text-stone-500 hover:text-stone-700 underline" do %>
+    Apa itu KopiGrade?
+  <% end %>
+</div>

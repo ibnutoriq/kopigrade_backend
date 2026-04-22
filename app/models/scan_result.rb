@@ -17,6 +17,12 @@ class ScanResult < ApplicationRecord
   validates :broken_defects, presence: true,
     numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :variety, inclusion: { in: VARIETIES }
+  validates :sub_district,
+            inclusion: {
+              in: -> (_record) { ReverseGeocodingService.all_sub_districts },
+              message: :invalid_sub_district
+            },
+            allow_blank: true
   validate :defects_within_total_beans
   validate :coordinates_within_banyuwangi, if: -> { latitude.present? && longitude.present? }
 
@@ -27,8 +33,6 @@ class ScanResult < ApplicationRecord
 
   def defects_within_total_beans
     return unless total_beans && black_defects && broken_defects
-    errors.add(:black_defects, :cannot_exceed_total) if black_defects > total_beans
-    errors.add(:broken_defects, :cannot_exceed_total) if broken_defects > total_beans
     errors.add(:base, :defects_exceed_total) if black_defects + broken_defects > total_beans
   end
 

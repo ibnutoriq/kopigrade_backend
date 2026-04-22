@@ -63,11 +63,51 @@ admin_seed_password: password123
 
 | Variable | Purpose |
 |---|---|
-| `GOOGLE_API_KEY` | Google AI Studio key — app degrades gracefully without it |
+| `GOOGLE_API_KEY` | Google AI Studio key — takes priority over `credentials.gemini_api_key`; app degrades gracefully without either |
 | `RAILS_MASTER_KEY` | Decrypts credentials in production |
 | `CORS_ALLOWED_ORIGINS` | Comma-separated origins allowed for `/api/*` |
 | `JOB_CONCURRENCY` | Solid Queue thread count (default: 1) |
 | `SOLID_QUEUE_IN_PUMA` | Set `true` to run the worker inside Puma |
+
+### Configuring Gemini for Local Development
+
+Without a Gemini API key every scan will end in `failed` state — the analyzed flow cannot be tested end-to-end. Before doing farmer outreach, set up the key and verify the full flow on a real device.
+
+**1. Obtain a key**
+
+Get a free key at https://aistudio.google.com/apikey (free tier quota is sufficient for development).
+
+**2. Store it in Rails credentials**
+
+```bash
+VISUAL="code --wait" bin/rails credentials:edit
+```
+
+Add the following line inside the editor:
+
+```yaml
+gemini_api_key: YOUR_KEY_HERE
+```
+
+**3. Verify the key loads**
+
+```bash
+bin/rails runner 'puts Rails.application.credentials.gemini_api_key.present?'
+# Expected output: true
+```
+
+**4. Test end-to-end on a real device**
+
+After restarting `bin/dev`:
+
+1. Open `http://<your-local-IP>:3000` in Chrome on an Android phone (same WiFi network).
+2. Submit a scan: Robusta, any sub-district, ~300 beans, ~20 black defects, ~30 broken defects.
+3. Wait for the analyzed state — Gemini should return advice in Bahasa Indonesia.
+4. Read the advice: does it sound like a real agronomist? Does it reference the grade and price?
+5. Tap "Bagikan ke WhatsApp" and confirm the share sheet opens with the correct text.
+6. Save screenshots of each state (home, form, pending, analyzed, failed) to `docs/screenshots/` for future reference.
+
+> **Never commit** `config/master.key` or put the raw key in `.env` files committed to git.
 
 ---
 
@@ -81,8 +121,40 @@ bin/dev
 bin/jobs start
 ```
 
-Admin dashboard: `http://localhost:3000`
-Default login: `admin@kopigrade.local` / `password123`
+Public PWA: `http://localhost:3000`
+Admin dashboard: `http://localhost:3000/admin/dashboard`
+Default admin login: `admin@kopigrade.local` / `password123`
+
+---
+
+## Public PWA
+
+A mobile-first Progressive Web App layer for farmers — no app store required.
+
+### URL structure
+
+| Path | Purpose |
+|---|---|
+| `/` | Landing page with CTA and today's prices |
+| `/scans/new` | Manual bean-count input form |
+| `/scans/:id` | Result page (auto-refreshes every 3 s while pending) |
+| `/harga` | Today's market prices (Robusta + Arabika) |
+| `/tentang` | "What is KopiGrade?" trust page |
+
+### Design choices
+
+- **No auth required** — fully anonymous, no farmer account needed
+- **Bahasa Indonesia only** — all public-layer copy is Indonesian; admin panel stays in English
+- **Sub-district dropdown** instead of GPS — avoids browser permission friction on low-end devices
+- **Meta-refresh every 3 s** while the AI job runs — zero JS, works on old Android WebViews
+- **PWA installable** — `public/manifest.webmanifest` enables "Add to Home Screen" on Chrome/Safari; no service worker in v0.1
+
+### Tested flows (360 px viewport)
+
+1. Visit `/` → click CTA → fill form → submit → see pending spinner → result with grade + advice + price
+2. Validation: defects > total → renders Indonesian error message, values preserved
+3. Failed AI job → friendly fallback message, no technical detail exposed
+4. Prices page, About page, Admin panel — all unaffected
 
 ---
 

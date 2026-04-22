@@ -1,0 +1,87 @@
+<div class="mb-6">
+  <h1 class="text-xl font-bold text-stone-900 mb-1">Cek Mutu Kopi Anda</h1>
+  <p class="text-sm text-stone-600">Hitung 100–500 biji kopi dari sampel Anda, lalu isi data di bawah.</p>
+</div>
+
+<% if @scan.errors.any? %>
+  <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-5">
+    <p class="text-sm font-semibold text-red-700 mb-1">Mohon periksa kembali:</p>
+    <ul class="list-disc list-inside text-sm text-red-600 space-y-1">
+      <% @scan.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @scan, url: web_scans_path, class: "space-y-5" do |f| %>
+
+  <%# Variety %>
+  <div>
+    <p class="block text-sm font-semibold text-stone-700 mb-2">Varietas</p>
+    <div class="grid grid-cols-2 gap-3">
+      <% [["robusta", "Robusta"], ["arabika", "Arabika"]].each do |value, label| %>
+        <label class="flex items-center justify-center gap-2 border-2 rounded-xl py-3 px-4 cursor-pointer text-sm font-semibold transition-colors
+          <%= @scan.variety == value ? 'border-amber-700 bg-amber-50 text-amber-800' : 'border-stone-200 bg-white text-stone-700 hover:border-amber-400' %>">
+          <%= f.radio_button :variety, value, class: "sr-only" %>
+          <%= label %>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <%# Sub-district %>
+  <div>
+    <%= f.label :sub_district, "Kecamatan", class: "block text-sm font-semibold text-stone-700 mb-1" %>
+    <%= f.select :sub_district,
+          @sub_districts.map { |name| [name, name] },
+          { include_blank: "— Pilih kecamatan —" },
+          class: "w-full border border-stone-300 rounded-xl py-3 px-3 text-base text-stone-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" %>
+    <% if @scan.errors[:sub_district].any? %>
+      <p class="mt-1 text-xs text-red-600"><%= @scan.errors[:sub_district].first %></p>
+    <% end %>
+  </div>
+
+  <%# Total beans %>
+  <div>
+    <%= f.label :total_beans, "Total biji yang dihitung", class: "block text-sm font-semibold text-stone-700 mb-1" %>
+    <%= f.number_field :total_beans, min: 10, max: 10_000,
+          placeholder: "Misal: 100, 200, 500",
+          class: "w-full border border-stone-300 rounded-xl py-3 px-3 text-base text-stone-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" %>
+    <% if @scan.errors[:total_beans].any? %>
+      <p class="mt-1 text-xs text-red-600"><%= @scan.errors[:total_beans].first %></p>
+    <% end %>
+  </div>
+
+  <%# Black defects %>
+  <div>
+    <%= f.label :black_defects, "Biji hitam", class: "block text-sm font-semibold text-stone-700 mb-1" %>
+    <%= f.number_field :black_defects, min: 0,
+          placeholder: "0",
+          class: "w-full border border-stone-300 rounded-xl py-3 px-3 text-base text-stone-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" %>
+    <p class="mt-1 text-xs text-stone-500">Biji yang berwarna hitam pekat</p>
+    <% if @scan.errors[:black_defects].any? %>
+      <p class="mt-1 text-xs text-red-600"><%= @scan.errors[:black_defects].first %></p>
+    <% end %>
+  </div>
+
+  <%# Broken defects %>
+  <div>
+    <%= f.label :broken_defects, "Biji pecah", class: "block text-sm font-semibold text-stone-700 mb-1" %>
+    <%= f.number_field :broken_defects, min: 0,
+          placeholder: "0",
+          class: "w-full border border-stone-300 rounded-xl py-3 px-3 text-base text-stone-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" %>
+    <p class="mt-1 text-xs text-stone-500">Biji yang patah atau retak</p>
+    <% if @scan.errors[:broken_defects].any? %>
+      <p class="mt-1 text-xs text-red-600"><%= @scan.errors[:broken_defects].first %></p>
+    <% end %>
+  </div>
+
+  <%# Submit %>
+  <div class="pt-2">
+    <%= f.submit "Cek Mutu & Saran",
+          class: "w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-4 px-6 rounded-xl text-lg cursor-pointer transition-colors" %>
+    <p class="mt-2 text-center text-xs text-stone-500">Hasil siap dalam 10–30 detik</p>
+  </div>
+
+<% end %>
