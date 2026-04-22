@@ -10,7 +10,7 @@ class Api::V1::ScanResultsController < Api::V1::BaseController
   end
 
   def show
-    scan = ScanResult.find(params[:id])
+    scan = ScanResult.find_by!(public_token: params[:id])
     render json: serialize_scan(scan, include_advice: true)
   end
 

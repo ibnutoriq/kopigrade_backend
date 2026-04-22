@@ -25,7 +25,7 @@ class Web::ScansController < Web::BaseController
   end
 
   def show
-    @scan = ScanResult.find(params[:id])
+    @scan = ScanResult.find_by!(public_token: params[:id])
     @market_price = MarketPrice.latest_for(@scan.variety)
   end
 

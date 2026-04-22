@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_22_000003) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_22_110839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,6 +45,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_22_000003) do
     t.boolean "export_eligible"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
+    t.string "public_token", null: false
     t.datetime "scanned_at"
     t.decimal "sni_defect_value", precision: 6, scale: 2
     t.string "sni_grade"
@@ -55,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_22_000003) do
     t.string "variety", default: "robusta"
     t.index ["api_client_id"], name: "index_scan_results_on_api_client_id"
     t.index ["created_at"], name: "index_scan_results_on_created_at"
+    t.index ["public_token"], name: "index_scan_results_on_public_token", unique: true
     t.index ["sni_grade"], name: "index_scan_results_on_sni_grade"
     t.index ["status"], name: "index_scan_results_on_status"
     t.index ["sub_district"], name: "index_scan_results_on_sub_district"

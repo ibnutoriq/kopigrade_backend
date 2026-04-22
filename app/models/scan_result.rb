@@ -29,7 +29,20 @@ class ScanResult < ApplicationRecord
   scope :this_month, -> { where(created_at: Time.current.beginning_of_month..Time.current.end_of_month) }
   scope :export_ready, -> { where(export_eligible: true) }
 
+  before_create :assign_public_token
+
+  def to_param
+    public_token
+  end
+
   private
+
+  def assign_public_token
+    loop do
+      self.public_token = SecureRandom.alphanumeric(8)
+      break unless ScanResult.exists?(public_token: public_token)
+    end
+  end
 
   def defects_within_total_beans
     return unless total_beans && black_defects && broken_defects
