@@ -9,8 +9,8 @@ services:
         fromDatabase:
           name: kopigrade-db
           property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false
+      - key: SECRET_KEY_BASE
+        generateValue: true
       - key: GOOGLE_API_KEY
         sync: false
       - key: SOLID_QUEUE_IN_PUMA

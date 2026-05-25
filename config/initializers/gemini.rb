@@ -1,5 +1,4 @@
-_gemini_api_key = ENV["GOOGLE_API_KEY"].presence ||
-                  Rails.application.credentials.gemini_api_key.presence
+_gemini_api_key = ENV["GOOGLE_API_KEY"].presence
 
 if _gemini_api_key
   GEMINI_CLIENT = Gemini.new(
